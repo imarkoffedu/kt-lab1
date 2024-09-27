@@ -2,9 +2,10 @@ package org.imarkoff.lab1.models
 
 import java.util.UUID
 
-class Admin {
+class Admin (
+    val name: String,
+) {
     val adminId: UUID = UUID.randomUUID()
-    var name: String = ""
 
     fun viewAllBookings(hotel: Hotel): List<Booking> {
         return hotel.bookings

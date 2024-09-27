@@ -1,8 +1,13 @@
 package org.imarkoff.lab1.models
 
 import java.util.Date
+import java.util.UUID
 
-class Hotel {
+class Hotel (
+    val name: String,
+    val address: String
+) {
+    val hotelId: UUID = UUID.randomUUID()
     val rooms: MutableList<Room> = mutableListOf()
     val bookings: MutableList<Booking> = mutableListOf()
 
@@ -21,12 +26,12 @@ class Hotel {
     }
 
     fun makeBooking(customer: Customer, room: Room, startDate: Date, endDate: Date) {
-        val booking = Booking().apply {
-            this.customer = customer
-            this.room = room
-            this.startDate = startDate
-            this.endDate = endDate
-        }
+        val booking = Booking(
+            customer,
+            room,
+            startDate,
+            endDate
+        )
 
         bookings.add(booking)
         room.markAsBooked()

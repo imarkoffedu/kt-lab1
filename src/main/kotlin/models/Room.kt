@@ -2,10 +2,11 @@ package org.imarkoff.lab1.models
 
 import java.util.*
 
-class Room {
+class Room (
+    val roomType: String,
+    val pricePerNight: Double
+) {
     val roomId: UUID = UUID.randomUUID()
-    var roomType: String = ""
-    var pricePerNight: Double = 0.0
     var isAvailable: Boolean = true
 
     fun checkAvailability(): Boolean {

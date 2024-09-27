@@ -2,18 +2,21 @@ package org.imarkoff.lab1.models
 
 import java.util.*
 
-class Booking {
+class Booking (
+    val customer: Customer,
+    val room: Room,
+    val startDate: Date,
+    val endDate: Date,
+) {
     val bookingId: UUID = UUID.randomUUID()
-    var customer: Customer = Customer()
-    var room: Room = Room()
-    var startDate: Date? = Date()
-    var endDate: Date? = Date()
+    var isCancelled: Boolean = false
 
     data class BookingDetails(
         val customer: Customer,
         val room: Room,
-        val startDate: Date?,
-        val endDate: Date?
+        val startDate: Date,
+        val endDate: Date,
+        val isCancelled: Boolean
     )
 
     fun getBookingDetails(): BookingDetails {
@@ -21,11 +24,13 @@ class Booking {
             customer = customer,
             room = room,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
+            isCancelled = isCancelled
         )
     }
 
     fun cancelBooking() {
         room.markAsAvailable()
+        isCancelled = true
     }
 }
