@@ -1,23 +1,25 @@
 package org.imarkoff.lab1.models
 
+import org.imarkoff.lab1.exceptions.RoomNotAvailableException
 import java.util.*
 
 class Room (
     val roomType: String,
-    val pricePerNight: Double
+    val pricePerNight: Float
 ) {
     val roomId: UUID = UUID.randomUUID()
-    var isAvailable: Boolean = true
+    val bookings: MutableList<Booking> = mutableListOf()
 
-    fun checkAvailability(): Boolean {
-        return isAvailable
+    fun checkAvailability(startDate: Date, endDate: Date): Boolean =
+        bookings.none { booking ->
+            startDate.before(booking.endDate) && endDate.after(booking.startDate) && !booking.isCancelled
+        }
+
+    fun book(booking: Booking) {
+        if (!checkAvailability(booking.startDate, booking.endDate))
+            throw RoomNotAvailableException()
+
+        bookings.add(booking)
     }
 
-    fun markAsBooked() {
-        isAvailable = false
-    }
-
-    fun markAsAvailable() {
-        isAvailable = true
-    }
 }

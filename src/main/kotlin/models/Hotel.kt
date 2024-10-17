@@ -8,24 +8,17 @@ class Hotel (
     val address: String
 ) {
     val hotelId: UUID = UUID.randomUUID()
-    val rooms: MutableList<Room> = mutableListOf()
-    val bookings: MutableList<Booking> = mutableListOf()
+    private val rooms: MutableList<Room> = mutableListOf()
 
-    fun addRoom(room: Room) {
-        rooms.add(room)
-    }
+    fun addRoom(room: Room) { rooms.add(room) }
 
-    fun findAvailableRoom(startDate: Date, endDate: Date, roomType: String): Boolean {
-        rooms.forEach { room ->
-            if (room.roomType == roomType) {
-                return room.checkAvailability()
-            }
+    fun availableRooms(startDate: Date, endDate: Date, roomType: String? = null): List<Room> =
+        rooms.filter {room ->
+            (roomType == null || room.roomType == roomType)
+                    && room.checkAvailability(startDate, endDate)
         }
 
-        return false
-    }
-
-    fun makeBooking(customer: Customer, room: Room, startDate: Date, endDate: Date) {
+    fun makeBooking(customer: Customer, room: Room, startDate: Date, endDate: Date): Booking {
         val booking = Booking(
             customer,
             room,
@@ -33,12 +26,9 @@ class Hotel (
             endDate
         )
 
-        bookings.add(booking)
-        room.markAsBooked()
+        room.book(booking)
+        return booking
     }
 
-    fun cancelBooking(booking: Booking) {
-        booking.cancelBooking()
-        bookings.remove(booking)
-    }
+    fun cancelBooking(booking: Booking) { booking.cancelBooking() }
 }
